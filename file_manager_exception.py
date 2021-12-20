@@ -1,0 +1,2 @@
+class FileManagerException(Exception):
+    pass

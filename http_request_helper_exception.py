@@ -1,0 +1,2 @@
+class HttpRequestHelperException(Exception):
+    pass
