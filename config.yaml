@@ -1,0 +1,5 @@
+currency_app:
+  url:
+    auth: "https://robot-dreams-de-api.herokuapp.com/auth"
+    data: "https://robot-dreams-de-api.herokuapp.com/out_of_stock"
+  directory: "./data/"
