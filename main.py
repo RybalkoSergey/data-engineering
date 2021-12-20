@@ -27,6 +27,6 @@ if __name__ == '__main__':
     file_manager = Filemanager(config.get_config('currency_app'))
     request_helper = HttpRequestHelper(config.get_config('currency_app'))
 
-    date = ['2021-06-24', '2021-06-19', '2021-06-20', '2021-06-21']
+    date = ['2021-12-01', '2021-12-02', '2021-12-03']
     for dt in date:
         app(file_manager=file_manager, request_helper=request_helper, process_date=dt)
