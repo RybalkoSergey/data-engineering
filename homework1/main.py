@@ -23,7 +23,7 @@ def app(file_manager, request_helper, process_date=None):
 
 
 if __name__ == '__main__':
-    config = Config(os.path.join('.', 'config.yaml'))
+    config = Config(os.path.join('..', 'config.yaml'))
     file_manager = Filemanager(config.get_config('currency_app'))
     request_helper = HttpRequestHelper(config.get_config('currency_app'))
 
