@@ -9,7 +9,7 @@ from airflow.operators.python_operator import PythonOperator
 from hdfs import InsecureClient
 
 pg_creds = {
-    'host': '127.0.0.1'
+    'host': '192.168.1.6'
     , 'port': '5432'
     , 'database': 'dshop'
     , 'user': 'pguser'
@@ -24,18 +24,14 @@ def postgres_dump(**kwargs):
     remove_file(base_dir, process_date)
     create_directory(base_dir, process_date)
 
-    with psycopg2.connect(**pg_creds) as pg_connection:
-        cursor = pg_connection.cursor()
-        with open(file=os.path.join('.', 'data', 'clients.csv'), mode='w') as csv_file:
-            cursor.copy_expert('COPY public.clients TO STDOUT WITH HEADER CSV', csv_file)
-        with open(file=os.path.join('.', 'data', 'orders.csv'), mode='w') as csv_file:
-            cursor.copy_expert('COPY public.orders TO STDOUT WITH HEADER CSV', csv_file)
-        with open(file=os.path.join('.', 'data', 'aisles.csv'), mode='w') as csv_file:
-            cursor.copy_expert('COPY public.aisles TO STDOUT WITH HEADER CSV', csv_file)
-        with open(file=os.path.join('.', 'data', 'departments.csv'), mode='w') as csv_file:
-            cursor.copy_expert('COPY public.departments TO STDOUT WITH HEADER CSV', csv_file)
+    tables_to_load = ('clients', 'orders', 'aisles', 'departments')
+    for table_name in tables_to_load:
+        with psycopg2.connect(**pg_creds) as pg_connection:
+            cursor = pg_connection.cursor()
+            with open(file=os.path.join('.', table_name, table_name + '.csv'), mode='w') as csv_file:
+                cursor.copy_expert(f'COPY public.{table_name} TO STDOUT WITH HEADER CSV', csv_file)
 
-    client = InsecureClient(f'http://127.0.0.1:50070/', user='user')
+    client = InsecureClient(f'http://192.168.1.6:50070/', user='user')
     client.makedirs('/dshop')
 
     client.upload('/dshop/clients.csv', os.path.join(base_dir, process_date) + '/clients.csv')
